@@ -122,5 +122,14 @@
       group: vagrant
       mode: 0644
   
+  - name: Modify calico.yaml
+    lineinfile:
+      path: /home/vagrant/calico.yaml
+      regexp: '(.*)(value: changemetopoolcidr)'
+      line: '\1value: {{ pod_network }}'
+      backrefs: True
+
   - name: Apply the CNI manifest
     shell: kubectl apply -f /home/vagrant/calico.yaml
+    become: True
+    become_user: vagrant
